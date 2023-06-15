@@ -11,6 +11,8 @@ import {
   usePopupModel,
 } from '@workday/canvas-kit-react/popup';
 import {Box, Flex} from '@workday/canvas-kit-react/layout';
+import {FormField} from '@workday/canvas-kit-react/form-field';
+import {Radio, RadioGroup} from '@workday/canvas-kit-react/radio';
 
 export const FocusRedirect = () => {
   const model = usePopupModel();
@@ -21,8 +23,10 @@ export const FocusRedirect = () => {
   useReturnFocus(model);
   useFocusRedirect(model);
 
-  const handleDelete = () => {
-    console.log('Delete Item');
+  const [value, setValue] = React.useState<string | number>('deep-dish');
+
+  const handleChange = (value: string | number) => {
+    setValue(value);
   };
 
   const popupId = 'popup-test-id';
@@ -47,13 +51,14 @@ export const FocusRedirect = () => {
                 Are you sure you'd like to delete the item titled 'My Item'?
               </Box>
             </Popup.Body>
-            <Flex gap="s" padding="xxs" marginTop="xxs">
-              <Popup.CloseButton as={DeleteButton} onClick={handleDelete}>
-                Delete
-              </Popup.CloseButton>
-              {/* Disabled elements should not be focusable and focus should move to the next focusable element */}
-              <Popup.CloseButton disabled>Cancel</Popup.CloseButton>
-            </Flex>
+            <FormField label="Choose your pizza crust" useFieldset={true}>
+              <RadioGroup name="crust" onChange={handleChange} value={value}>
+                <Radio label="Deep Dish" value="deep-dish" />
+                <Radio label="Thin" value="thin" />
+                <Radio label="Gluten Free" value="gluten-free" />
+                <Radio label="Cauliflower" value="cauliflower" />
+              </RadioGroup>
+            </FormField>
           </Popup.Card>
         </Popup.Popper>
         <SecondaryButton>Next Focusable Button</SecondaryButton>
